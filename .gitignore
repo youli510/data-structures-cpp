@@ -361,3 +361,26 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# ===== 本项目补充（2026-09-25）=====
+# CMake 构建目录（会生成几千个文件，绝不能提交）
+build/
+build-*/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+
+# 编码转换脚本的备份目录（24 个 GBK 原文件）
+.encoding_backup/
+
+# 实测 x64/Debug 下的怪文件（杀软/同步工具产生）
+*.enc
+
+# vcpkg
+vcpkg_installed/
+
+# 工具缓存
+.cache/
+.cache/clangd/

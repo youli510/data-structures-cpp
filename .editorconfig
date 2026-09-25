@@ -1,0 +1,36 @@
+# EditorConfig —— https://editorconfig.org
+# VS 2019+ / VS Code / CLion / Vim / Sublime 都原生支持
+# 目的：让【新建的文件】默认就是 UTF-8（无 BOM），杜绝再出现 GBK 乱码
+#
+# ★ 注意：EditorConfig 只影响【新建/另存】的文件，不会自动转换已有文件。
+#    已有文件请跑： python ProjectLab\scripts\fix_encoding.py <目录>
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{c,cc,cpp,cxx,h,hh,hpp,hxx,inl,inc}]
+charset = utf-8
+indent_size = 4
+
+[*.{md,markdown}]
+trim_trailing_whitespace = false
+
+[*.{json,yml,yaml}]
+indent_size = 2
+
+[*.{bat,cmd,ps1}]
+end_of_line = crlf
+
+[Makefile]
+indent_style = tab
+
+[*.{vcxproj,filters,sln}]
+end_of_line = crlf
+charset = utf-8
