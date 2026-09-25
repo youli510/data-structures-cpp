@@ -14,7 +14,7 @@ int main() {
 	else {
 		off(&x, &y, little);
 	}
-	printf("½»»»ºó:x=%d y=%d",x,y);
+	printf("äº¤æ¢å:x=%d y=%d",x,y);
 
 
 

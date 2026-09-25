@@ -8,7 +8,7 @@ int main() {
 	while (1) {
 		int sign = getchar();
 		if (sign == 'q' || sign == 'Q') {
-			printf("ÍË³ö\n");
+			printf("é€€å‡º\n");
 			break;
 		}
 		if (sign == '1') {
@@ -29,7 +29,7 @@ void get_char(int (*p)(char)) {
 		if (ch == ' ') continue;
 		printf("%c %d ", ch, p(ch));
 	}
-	printf("½áÊø");
+	printf("ç»“æŸ");
 }
 
 int number(char ch) {

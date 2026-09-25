@@ -15,15 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="exercise.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ch10\10.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ch10\2d.c">
+    <ClCompile Include="ds\graph\A_star.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

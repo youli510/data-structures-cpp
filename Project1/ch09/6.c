@@ -14,7 +14,7 @@ int main() {
 		change(&a, &b, &c, big);
 	}
 
-	printf("½»»»ºó:%lf %lf %lf ", a, b, c);
+	printf("äº¤æ¢å:%lf %lf %lf ", a, b, c);
 	return 0;
 }
 

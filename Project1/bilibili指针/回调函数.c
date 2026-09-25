@@ -12,10 +12,10 @@ int main() {
 	}
 	int j;
 	if (scanf("%d",&j)==1 && j==1) {
-		sort(arr, 10, s);
+		sort(arr, 10, s); //输入1代表升序 >> s函数
 	}
 	else {
-		sort(arr, 10, l);
+		sort(arr, 10, l); //否则降序 >> l函数
 	}
 	for (int i = 0; i < 10; i++) {
 		printf("%d ",arr[i]);
