@@ -384,3 +384,6 @@ vcpkg_installed/
 # 工具缓存
 .cache/
 .cache/clangd/
+
+# ===== 个人的学习策略/规划文档（本地保留，不上传）=====
+Project1/ProjectLab/
