@@ -1,5 +1,5 @@
 # =============================================================================
-# CMakeLists-root.txt —— 复制到 S:\vspool\Project1\Project1\CMakeLists.txt
+# 本仓库根目录的 CMakeLists.txt
 #
 # 目的：一个仓库里放 N 个「各自带 main()」的学习用 cpp，
 #       每个 .cpp 编成一个独立的可执行文件，互不冲突。

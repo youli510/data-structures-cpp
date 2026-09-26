@@ -3,7 +3,7 @@
 # 目的：让【新建的文件】默认就是 UTF-8（无 BOM），杜绝再出现 GBK 乱码
 #
 # ★ 注意：EditorConfig 只影响【新建/另存】的文件，不会自动转换已有文件。
-#    已有文件请跑： python ProjectLab\scripts\fix_encoding.py <目录>
+#    已有文件可以用脚本批量转换（详见项目 README 的「开发约定」一节）
 
 root = true
 
