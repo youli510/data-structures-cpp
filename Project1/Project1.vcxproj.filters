@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ds\graph\A_star.cpp">
+    <ClCompile Include="ds\linear\undo_redo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
