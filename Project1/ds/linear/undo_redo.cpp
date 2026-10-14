@@ -85,6 +85,7 @@ int main() {
 	std::cout << st.gettext() << "\n";
 	st.undo();
 	std::cout << st.gettext() << "\n";
+    st.insert(3, 'd');
 	st.redo();
 	std::cout << st.gettext() << "\n";
 	st.redo();
