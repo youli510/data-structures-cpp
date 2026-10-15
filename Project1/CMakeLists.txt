@@ -38,6 +38,12 @@ if (MSVC)
     # /Zc:__cplusplus : 让 __cplusplus 宏正确反映 C++ 标准
     add_compile_options(/W4 /utf-8 /permissive- /Zc:__cplusplus)
 
+    # /FI : 强制包含（Forced Include）—— 编译【每一个】.cpp 时自动在最前面插入该头文件。
+    #       用途：让所有 exe 在 main() 之前把控制台代码页切成 UTF-8，中文才不乱码。
+    #       为什么不能用 #include：那要改 24 个源文件；/FI 一行搞定。
+    #       原理与踩坑说明见 ds/console_utf8.h
+    add_compile_options("/FI${CMAKE_CURRENT_SOURCE_DIR}/ds/console_utf8.h")
+
     # /wd4996 : 屏蔽「strcpy 不安全」这类 CRT 安全警告（学习项目里噪音太多）
     # 如果想让它们显示出来，注释掉下一行
     add_compile_options(/wd4996)
