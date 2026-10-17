@@ -385,3 +385,6 @@ vcpkg_installed/
 .cache/
 .cache/clangd/
 
+# 本地记忆/会话缓存（绝不上传）
+.pi/
+**/.pi/
