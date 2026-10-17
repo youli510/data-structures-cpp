@@ -18,7 +18,7 @@ public:
 		return text;
 	}
 	void insert(int pos, char ch) {
-		text.insert(pos, 1, ch);
+        text.insert(pos, 1, ch);
 		undoStack.push(action{action::DELETE, pos, ch});
 		while (!redoStack.empty()) {
 			redoStack.pop();
@@ -85,7 +85,6 @@ int main() {
 	std::cout << st.gettext() << "\n";
 	st.undo();
 	std::cout << st.gettext() << "\n";
-    st.insert(3, 'd');
 	st.redo();
 	std::cout << st.gettext() << "\n";
 	st.redo();

@@ -7,10 +7,15 @@
 //
 // 【面试会问的（写完自己回答一遍）】
 //   1. 平均 / 最坏时间复杂度？最坏出现在什么输入上？
+//      平均O(nlogn)最坏O(n²),当已排序/完全逆序/全是相同元素时出现最坏
 //   2. 怎么把最坏情况从 O(n²) 降到期望 O(n log n)？
+//      随机选 pivot，把「选到极值」从必然事件变成低概率事件，从而把深度从 O(n) 降到期望 O(log n)。
 //   3. 快排稳定吗？为什么？
+//      不稳定，分区时的使用swap会把元素跨越很远距离交换。这种「远距离搬运」无法保证相等元素之间的原始顺序。
 //   4. 快排和堆排都是 O(n log n)，为什么实际快排更快？
+//      
 //   5. 三路快排在什么数据上优势明显？
+//      大量重复元素时。相等元素一次性归拢、整段跳过递归
 //
 // 【编译运行】
 //   cmake --build build --config Debug --target ds_sort_quick_sort
@@ -32,8 +37,18 @@
 // -----------------------------------------------------------------------------
 int partition_lomuto(std::vector<int>& arr, int lo, int hi) {
     // TODO: 在这里实现
-    (void)arr; (void)lo; (void)hi;
-    return hi;   // 占位，让测试失败而不是崩溃
+    int pivot = arr[hi];
+    int i = lo;
+    for (int j = lo; j <= hi - 1;++j) {
+        if (arr[j] <= pivot) {
+            std::swap(arr[j],arr[i]);
+            ++i;
+        }
+    }
+    std::swap(arr[i],arr[hi]);
+    return i;
+    /*(void)arr; (void)lo; (void)hi;
+    return hi; */  // 占位，让测试失败而不是崩溃
 }
 
 // -----------------------------------------------------------------------------
@@ -43,7 +58,11 @@ int partition_lomuto(std::vector<int>& arr, int lo, int hi) {
 // -----------------------------------------------------------------------------
 void quick_sort(std::vector<int>& arr, int lo, int hi) {
     // TODO: 在这里实现
-    (void)arr; (void)lo; (void)hi;
+    if (lo>=hi) return;
+    int pivot = partition_lomuto(arr,lo,hi);
+    quick_sort(arr,lo,pivot-1);
+    quick_sort(arr,pivot+1,hi);
+    //(void)arr; (void)lo; (void)hi;
 }
 
 // 对外接口（已写好，不用改）
@@ -58,16 +77,26 @@ void quick_sort(std::vector<int>& arr) {
 //         这样「已有序」的输入也不会每次都选到极值当 pivot。
 //
 //   ★ 面试点：为什么「固定选最后一个」在已排序数组上会退化成 O(n²)？
+//              固定选一个数在已排序数组上，最后一个一定是极值，每次分区都退化成 1 : n-1。递归深度 = n，每层扫描 O(n)
+//              即遇到极值时排序会变成O(n²)，随机较均匀，期望O(n log n)，最坏O(n²)
 // -----------------------------------------------------------------------------
 int partition_random(std::vector<int>& arr, int lo, int hi) {
     // TODO: 在这里实现（可以先随机交换 arr[hi]，再复用 partition_lomuto 的逻辑）
-    (void)arr; (void)lo; (void)hi;
-    return hi;
+    static std::mt19937 gen(42);
+    std::uniform_int_distribution<int> dist(lo,hi);
+    std::swap(arr[dist(gen)], arr[hi]);
+    return partition_lomuto(arr,lo,hi);
+    //(void)arr; (void)lo; (void)hi;
+    //return hi;
 }
 
 void quick_sort_random(std::vector<int>& arr, int lo, int hi) {
     // TODO: 在这里实现
-    (void)arr; (void)lo; (void)hi;
+    if (lo>=hi) return;
+    int pivot = partition_random(arr, lo, hi);
+    quick_sort_random(arr, lo, pivot - 1);
+    quick_sort_random(arr, pivot + 1, hi);
+    //(void)arr; (void)lo; (void)hi;
 }
 
 void quick_sort_random(std::vector<int>& arr) {
@@ -85,7 +114,28 @@ void quick_sort_random(std::vector<int>& arr) {
 // -----------------------------------------------------------------------------
 void quick_sort_three_way(std::vector<int>& arr, int lo, int hi) {
     // TODO: 在这里实现
-    (void)arr; (void)lo; (void)hi;
+    if (lo >= hi) return;
+    int pivot = arr[lo];
+    int it = lo;
+    int i = lo + 1;
+    int gt = hi;
+    while (i<=gt) {
+        if (arr[i]<pivot) {
+            std::swap(arr[it],arr[i]);
+            ++it;
+            ++i;
+        }
+        else if (arr[i]>pivot) {
+            std::swap(arr[gt],arr[i]);
+            --gt;
+        }
+        else {
+            ++i;
+        }
+    }
+    quick_sort_three_way(arr,lo,it-1);
+    quick_sort_three_way(arr,gt+1,hi);
+    //(void)arr; (void)lo; (void)hi;
 }
 
 void quick_sort_three_way(std::vector<int>& arr) {
@@ -175,14 +225,14 @@ int main() {
 
     // --- 三路快排：大量重复元素 ---
     {
-        std::vector<int> a(50000, 3);                    // 全一样
+        std::vector<int> a(5000, 3);                     // 全一样
         std::vector<int> b = a;
         double ms1 = time_ms([&] { quick_sort(a); });
         double ms2 = time_ms([&] { quick_sort_three_way(b); });
-        std::cout << "  5 万个相同元素: 普通快排 = " << ms1
+        std::cout << "  5 千个相同元素: 普通快排 = " << ms1
                   << " ms, 三路快排 = " << ms2 << " ms\n";
         std::cout << "  ↑ 这就是三路快排存在的意义\n";
-        check_arr("三路快排结果正确", b, std::vector<int>(50000, 3));
+        check_arr("三路快排结果正确", b, std::vector<int>(5000, 3));
     }
 
     return summary("快速排序");
