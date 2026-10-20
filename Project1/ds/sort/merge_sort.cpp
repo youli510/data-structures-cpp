@@ -5,11 +5,16 @@
 // 【要求】不看资料，把下面 3 个 TODO 写出来。
 //
 // 【面试会问的】
-//   1. 归并排序的时间/空间复杂度？为什么空间是 O(n)？
+//   1. 归并排序的时间/空间复杂度？为什么空间是 O(log n)？
+//      时间复杂度O(nlog n)，数组归并、链表递归归并空间为O(log n)（需要递归栈）,跌打链表空间为O(1)
 //   2. 归并稳定吗？为什么？（对比快排）
+//      归并并没有使用swap远距离进行交换，而是选择同一半区的值进行交换，相比快排稳定
 //   3. 什么场景下必须用归并而不是快排？
 //      提示：LeetCode 148 排序链表 —— 链表上快排为什么不好用？
+//      1.链表排序 2.需要稳定排序 3.需要保证最坏情况 4.外部排序
 //   4. 「外部排序」（数据大到内存放不下）为什么必须用归并？
+//      快排是随机访问，随机读一次要几毫秒，快排要做 O(n log n) 次随机访问；
+//      而归并可以读一块写一块，最后在进行合并成大文件
 //
 // 【编译运行】
 //   cmake --build build --config Debug --target ds_sort_merge_sort
@@ -28,7 +33,21 @@
 // -----------------------------------------------------------------------------
 void merge(std::vector<int>& arr, std::vector<int>& buf, int lo, int mid, int hi) {
     // TODO: 在这里实现
-    (void)arr; (void)buf; (void)lo; (void)mid; (void)hi;
+    int i = lo;
+    int j = mid + 1;
+    int k = lo;
+    while (i<=mid && j<=hi) {
+        if (arr[i]<=arr[j]) {
+            buf[k++] = arr[i++];
+        }
+        else {
+            buf[k++] = arr[j++];
+        }
+    }
+    while (i <= mid) buf[k++] = arr[i++];
+    while (j <= hi) buf[k++] = arr[j++];
+    for (int t = lo; t <= hi; ++t) arr[t] = buf[t];
+    //(void)arr; (void)buf; (void)lo; (void)mid; (void)hi;
 }
 
 // -----------------------------------------------------------------------------
@@ -38,7 +57,12 @@ void merge(std::vector<int>& arr, std::vector<int>& buf, int lo, int mid, int hi
 // -----------------------------------------------------------------------------
 void merge_sort(std::vector<int>& arr, std::vector<int>& buf, int lo, int hi) {
     // TODO: 在这里实现
-    (void)arr; (void)buf; (void)lo; (void)hi;
+    if (lo>=hi) return;
+    int mid = lo + (hi - lo) / 2;
+    merge_sort(arr,buf,lo,mid);
+    merge_sort(arr,buf,mid+1,hi);
+    merge(arr,buf,lo,mid,hi);
+    //(void)arr; (void)buf; (void)lo; (void)hi;
 }
 
 // 对外接口（已写好）
@@ -68,16 +92,44 @@ struct ListNode {
 
 ListNode* merge_two(ListNode* a, ListNode* b) {
     // TODO: 合并两个有序链表（可以先写个哑结点 dummy，最后返回 dummy.next）
-    (void)a; (void)b;
-    return nullptr;
+    ListNode dummy(0);
+    ListNode* tail = &dummy;
+    while (a && b) {
+        if (a->val<=b->val) {
+            tail->next = a;
+            a = a->next;
+        }
+        else {
+            tail->next = b;
+            b = b->next;
+        }
+        tail = tail->next;
+    }
+    tail->next = a ? a : b;
+    return dummy.next;
+    //(void)a; (void)b;
+    //return nullptr;
 }
 
 ListNode* sort_list(ListNode* head) {
     // TODO: 链表归并排序
     //   递归出口：head == nullptr || head->next == nullptr
     //   找中点：快慢指针，注意要「断开」成两段
-    (void)head;
-    return nullptr;
+    if (!head || !head->next) return head;
+    ListNode* slow = head;
+    ListNode* fast = head->next;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    ListNode* mid = slow->next;
+    slow->next = nullptr;
+    //分成[head,mid-1]和[mid,end]两段
+    ListNode* left = sort_list(head);
+    ListNode* right = sort_list(mid);
+    return merge_two(left,right);
+    //(void)head;
+    //return nullptr;
 }
 
 // =============================================================================
