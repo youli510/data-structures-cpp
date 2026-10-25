@@ -20,12 +20,14 @@ stack* initstack() {
 bool isempty(const stack *s) {
 	return s->head->next == NULL;
 }
+// 链式栈入栈：头插法，新节点成为新的栈顶
 void push(stack*s,bit32 n) {
 	node* p = new node;
 	p->data = n;
 	p->next = s->head->next;
 	s->head->next = p;
 }
+// 链式栈出栈：删除 head 之后的第一个节点（真正的栈顶）
 bool pop(stack*s,bit32*n) {
 	if (isempty(s)) return false;
 	node* t = s->head->next;
@@ -34,11 +36,13 @@ bool pop(stack*s,bit32*n) {
 	delete t;
 	return true;
 }
+// 只看栈顶：返回 head->next 的值
 bool gettop(const stack*s,bit32*n) {
 	if (isempty(s)) return false;
 	*n = s->head->data;
 	return true;
 }
+// 释放所有节点（含 head）以及栈对象
 void deletestack(stack*s) {
 	node* p = s->head;
 	while (p!=NULL) {

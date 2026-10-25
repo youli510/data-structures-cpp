@@ -21,14 +21,17 @@ public:
 	stack(const stack&) = delete;
 	stack& operator=(const stack&) = delete;
 
+	// 模板栈判空：top == -1
 	bool empty() const {
 		return top == -1;
 	}
 
+	// 模板栈判满：top >= capacity-1
 	bool full() const {
 		return top >= capacity - 1;
 	}
 
+	// 模板栈入栈：先 ++top 再赋值
 	bool push(const T &n) {
 		if (full()) {
 			std::cerr << "满了";
@@ -38,6 +41,7 @@ public:
 		return true;
 	}
 
+	// 模板栈出栈：把栈顶值写到参数里，再 top--
 	bool pop(T &n){
 		if (empty()) {
 			std::cerr << "空的";
@@ -47,6 +51,7 @@ public:
 		return true;
 	}
 
+	// 模板栈看栈顶（不删除）
 	bool getTop(T &n) const{
 		if (empty()) {
 			std::cerr << "空的";
@@ -84,6 +89,7 @@ Token getToken(const std::string& expr, char& symbol, int& index) {
 		default:return num;
 	}
 }
+// 计算后缀表达式：数字入栈；遇到运算符弹出两个数算完再压回
 bit32 evaluatepostfix(const std::string &expr) {
 	using enum Token;
 	stack<int> st;
@@ -114,6 +120,7 @@ bit32 evaluatepostfix(const std::string &expr) {
 	st.pop(result);
 	return result;
 }
+// 把运算符追加到后缀表达式字符串末尾
 void append(std::string &fix,Token op) {
 	using enum Token;
 	switch (op) {

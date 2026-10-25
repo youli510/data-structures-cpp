@@ -25,6 +25,7 @@ public:
 		heads[u] = node1;
 		heads[w] = node2;
 	};
+	// 打印邻接表：逐行输出每个顶点的所有邻居（顺序是头插法的逆序）
 	void printgraph() {
 		for (int i = 0; i <= V - 1;i++) {
 			Edge* p = heads[i];
@@ -36,6 +37,7 @@ public:
 			std::cout << "\n";
 		}
 	}
+	// BFS 遍历：队列 + visited；入队时立刻标记，防止同一顶点重复入队
 	void bfs(int star) {
 		bool* visit = new bool[V];
 		for (int i = 0; i < V; i++) visit[i] = false;
@@ -59,6 +61,7 @@ public:
 		std::cout << "\n";
 		delete[] visit;
 	}
+	// 递归 DFS：标记自己，然后递归访问每个未访问的邻居
 	void dfs(int u,bool* visit) {
 		visit[u] = true;
 		std::cout << u << " ";
@@ -71,6 +74,7 @@ public:
 			p = p->next;
 		}
 	}
+	// DFS 对外入口：分配 visited 数组，调用 dfs 后释放
 	void dfsALL(int start) {
 		bool* visit = new bool[V];
 		for (int i = 0; i < V; i++) visit[i] = false;
@@ -78,6 +82,7 @@ public:
 		std::cout << "\n";
 		delete[] visit;
 	}
+	// 迭代 DFS：用栈替代递归；注意先 top 取值再 pop
 	void dfsIterative(int start) {
 		bool* visit = new bool[V];
 		for (int i = 0; i < V; i++) visit[i] = false;

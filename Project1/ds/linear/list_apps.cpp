@@ -6,6 +6,7 @@ struct node {
 	bit32 data;
 	node* next;
 };
+// 快慢指针：找倒数第 k 个节点
 int findnodeFS(node* l, int k) {
 	node* fast = l->next;
 	node* slow = l->next; 
@@ -20,18 +21,21 @@ int findnodeFS(node* l, int k) {
 	return 1;
 }			
 /*快慢指针*/
+// 创建带头结点的空链表（data=0 表示头结点无有效值）
 node* initilist() {
 	node* head = new node;
 	head->data = 0;
 	head->next = NULL;
 	return head;
 }
+// 同上：用指定值 n 初始化头结点
 node* initilist(bit32 n) {
 	node* head = new node;
 	head->data = n;
 	head->next = NULL;
 	return head;
 }
+// 遍历找到并返回尾节点
 node* get_tail(node*l) {
 	if (l == NULL) return NULL;
 	node* p = l;
@@ -40,6 +44,7 @@ node* get_tail(node*l) {
 	}
 	return p;
 }	
+// 尾插：新建值为 n 的节点接在 l 之后，返回新尾巴
 node* listtail(node*l,bit32 n) {
 	node* p =new node;
 	p->data = n;
@@ -47,17 +52,20 @@ node* listtail(node*l,bit32 n) {
 	p->next = NULL;
 	return p;
 }
+// 尾插：把一个已有节点 n 接在 l 之后，返回它
 node* listtail(node*l,node*n) {
 	l->next = n;
 	n->next = NULL;
 	return n;
 }
+// 头插：在头结点之后插入新节点
 void listhead(node* l, bit32 n) {
 	node* p = new node;
 	p->data = n;
 	p->next = l->next;
 	l->next = p;
 }
+// 释放整条链表（包含头结点）
 void clearlist(node* l) {
 	node* p = l;
 	while (p != NULL) {
@@ -66,11 +74,13 @@ void clearlist(node* l) {
 		delete q;
 	}
 }
+// 删除给定节点的下一个节点
 void deletenode(node* l) {
 	node* t = l->next;
 	l->next = t->next;
 	delete(t);
 }
+// 打印链表所有元素
 void listnode(node* l) {
 	node* p = l->next;
 	while (p != NULL) {
@@ -79,6 +89,7 @@ void listnode(node* l) {
 	}
 	std::cout << "\n";
 }
+// 返回链表长度（不含头结点）
 int listlength(node* l) {
 	node* p = l->next;
 	int i = 0;
@@ -88,6 +99,7 @@ int listlength(node* l) {
 	}
 	return i;
 }
+// 找两条链表的第一个公共节点：先把长的一条对齐，再同步前进
 node* findstrnode(node* l, node* i) {
 	if (l == NULL || i == NULL) return NULL;
 	node* fast, *slow;
@@ -113,6 +125,7 @@ node* findstrnode(node* l, node* i) {
 	}
 	return fast;
 }
+// 删除绝对值重复的节点：用计数数组标记出现过的值
 void removenode(node* l, int n) {
 	int* q = new int[n];
 	for (int i = 0; i < n; i++) {
@@ -131,6 +144,7 @@ void removenode(node* l, int n) {
 	}
 	delete[] q;
 }			//删除绝对值重复
+// 原地反转链表（三指针 prev / cur / next）
 node* reverse(node* l) {
 	node* first = NULL;
 	node* second = l->next;
@@ -144,6 +158,7 @@ node* reverse(node* l) {
 	l->next = first;
 	return l;
 }
+// 快慢指针找中点（slow 停在中间偏左那个）
 node* middle(node* l) {
 	node* fast = l->next;
 	node* slow = l;
@@ -153,10 +168,12 @@ node* middle(node* l) {
 	}
 	return slow;
 }
+// 删除中点节点
 void removemiddle(node*l) {
 	node*middlenode=middle(l);
 	deletenode(middlenode);
 }
+// 重排成 L0→Ln→L1→Ln-1…：找中点 + 反转后半 + 交替合并
 void reorderlist(node*l) {
 	node*middlenode=middle(l);
 	node* first = NULL;
@@ -203,6 +220,7 @@ int iscycle(node*l) {
 	}
 	return 0;
 }
+// 找环的入口：快慢指针相遇后，一个从头、一个从相遇点同速前进
 node* findbegin(node* l) {
 	node* fast = l;
 	node* slow = l;
@@ -230,6 +248,7 @@ node* findbegin(node* l) {
 	}
 	return NULL;
 }
+// 先断开环，再释放整条链表
 void clearcyclelist(node* l) {
 	if (l == NULL) return;
 	node* begin = findbegin(l);
@@ -243,6 +262,7 @@ void clearcyclelist(node* l) {
 	clearlist(l);
 	l->next = NULL;
 }
+// 打印带环链表（走到环入口后循环一整圈）
 void printcyclelist(node* l) {
 	if (l == NULL) {
 		std::cout << "空";

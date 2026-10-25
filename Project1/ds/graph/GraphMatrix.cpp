@@ -9,10 +9,12 @@ private:
 	int V;
 public:
 	graphMatrix(int v) :V(v), matrix(v, std::vector<int>(v, 0)) {}
+	// 加无向边：matrix[u][w] 与 matrix[w][u] 同时置 1（矩阵对称）
 	void addEdge(int u,int w) {
 		matrix[u][w] = 1;
 		matrix[w][u] = 1;
 	}
+	// 打印 n×n 邻接矩阵（1 表示有边，0 表示无边）
 	void printMatrix() {
 		for (int i = 0; i < V;i++) {
 			for (int j: matrix[i]) {
@@ -21,6 +23,7 @@ public:
 			std::cout << "\n";
 		}
 	}
+	// 矩阵版 BFS：扫描 u 的整行，用 matrix[u][v]==1 判断是否有边
 	void bfs(int start) {
 		std::vector<bool> visit(V,false);
 		std::queue<int> q;

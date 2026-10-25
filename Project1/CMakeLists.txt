@@ -42,7 +42,7 @@ if (MSVC)
     #       用途：让所有 exe 在 main() 之前把控制台代码页切成 UTF-8，中文才不乱码。
     #       为什么不能用 #include：那要改 24 个源文件；/FI 一行搞定。
     #       原理与踩坑说明见 ds/console_utf8.h
-    add_compile_options("/FI${CMAKE_CURRENT_SOURCE_DIR}/ds/console_utf8.h")
+    add_compile_options("/FI${CMAKE_CURRENT_SOURCE_DIR}/ds/sort/console_utf8.h")
 
     # /wd4996 : 屏蔽「strcpy 不安全」这类 CRT 安全警告（学习项目里噪音太多）
     # 如果想让它们显示出来，注释掉下一行

@@ -9,6 +9,7 @@ struct queue {
 	int front;
 	int rear;
 };
+// 初始化循环队列（生产者-消费者模拟用）
 queue* initqueue() {
 	queue* q = new queue;
 	q->data = new bit32[MAXSIZE];
@@ -16,18 +17,22 @@ queue* initqueue() {
 	q->rear = 0;
 	return q;
 }
+// 判满：(rear+1) % MAXSIZE == front
 bool isfull(const queue* q) {
 	return (q->rear + 1) % MAXSIZE == q->front;
 }
+// 判空：front == rear
 bool isempty(const queue* q) {
 	return q->front == q->rear;
 }
+// 入队：队列满则返回 false（不覆盖已有消息）
 bool enqueue(queue* q, bit32 e) {
 	if (isfull(q)) return false;
 	q->data[q->rear] = e;
 	q->rear = (q->rear + 1) % MAXSIZE;
 	return true;
 }
+// 出队：队列空则返回 false
 bool dequeue(queue* q, bit32* e) {
 	if (isempty(q)) return false;
 	*e = q->data[q->front];

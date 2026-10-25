@@ -40,18 +40,21 @@ int main() {
 	clearlist(list);
 	return 0;
 }
+// 创建带头结点的空链表
 node* initlist() {
 	node* head = new node;
 	head->data = 0;
 	head->next = NULL;
 	return head;
 }					//初始化节点
+// 头插法：每次插到最前面，所以显示顺序与插入顺序相反
 void inserthead(node* l,ElemType n) {
 	node* p = new node;
 	p->data = n;
 	p->next = l->next;
 	l->next = p;
 }					//头插法（输出顺序与输入顺序是反的）
+// 打印链表所有元素
 void listnode(node *l) {
 	node* p = l->next;
 	while (p != NULL) {
@@ -60,6 +63,7 @@ void listnode(node *l) {
 	}
 	std::cout << "\n";
 }					//遍历
+// 遍历找到并返回尾节点
 node* get_tail(node* l) {
 	node* p = l;
 	while (p->next != NULL) {
@@ -67,6 +71,7 @@ node* get_tail(node* l) {
 	}
 	return p;
 }					//获取尾节点
+// 尾插：接在给定尾节点之后，返回新的尾节点
 node* inserttail(node* l,ElemType n) {
 	node* p = new node;
 	p->data = n;
@@ -74,6 +79,7 @@ node* inserttail(node* l,ElemType n) {
 	p->next = NULL;
 	return p;
 }						//尾插法
+// 在第 pos 个位置插入（pos 从 0 计，0 表示头结点之后）
 int insertnode(node* l,int pos, ElemType n) {
 	node* p = l;
 	int i = 0;
@@ -90,6 +96,7 @@ int insertnode(node* l,int pos, ElemType n) {
 	p->next = q;
 	return 1;
 }						//插入
+// 删除第 pos 个位置的节点
 int deletenode(node* l, int pos) {
 	node* p = l;
 	int i = 0;
@@ -105,6 +112,7 @@ int deletenode(node* l, int pos) {
 	delete q;
 	return 1;
 }							//删除
+// 返回链表长度（不含头结点）
 int listlength(node* l) {
 	node* p = l->next;
 	int len = 0;
@@ -114,6 +122,7 @@ int listlength(node* l) {
 	}
 	return len;
 }							//获取长度
+// 释放整条链表（含头结点）
 void clearlist(node* l) {
 	node* p = l;
 	while (p != NULL) {

@@ -13,6 +13,7 @@ struct queue {
 	queuenode* front;
 	queuenode* rear;
 };
+// 初始化链式队列：建哑结点，front 和 rear 都指向它
 queue* initqueue() {
 	queue* q = new queue;
 	queuenode* node = new queuenode;
@@ -22,9 +23,11 @@ queue* initqueue() {
 	q->rear = node;
 	return q;
 }
+// 判空：front == rear
 bool isempty(queue* q) {
 	return q->front == q->rear;
 }
+// 入队：在 rear 后面挂新节点，rear 后移
 void enqueue(queue* q, bit32 n) {
 	queuenode* node = new queuenode;
 	node->data = n;
@@ -32,6 +35,7 @@ void enqueue(queue* q, bit32 n) {
 	q->rear->next = node;
 	q->rear = node;
 }
+// 出队：删掉 front 的下一个节点；删空时要把 rear 退回 front
 bool dequeue(queue* q, bit32* n) {
 	if (isempty(q)) return false;
 	queuenode* node = q->front->next;
@@ -41,6 +45,7 @@ bool dequeue(queue* q, bit32* n) {
 	delete(node);
 	return true;
 }
+// 循环出队直到空，然后释放哑结点和队列对象
 void clearqueue(queue*q) {
 	while (!isempty(q)) {
 		bit32 t;

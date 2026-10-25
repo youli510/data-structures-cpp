@@ -17,6 +17,7 @@ public:
 	std::string gettext() {
 		return text;
 	}
+	// 插入字符；把对应的「撤销动作 = 删除」压入 undo，并清空 redo
 	void insert(int pos, char ch) {
         text.insert(pos, 1, ch);
 		undoStack.push(action{action::DELETE, pos, ch});
@@ -24,6 +25,7 @@ public:
 			redoStack.pop();
 		}
 	}
+	// 删除字符；把对应的「撤销动作 = 插入」压入 undo，并清空 redo
 	void remove(int pos) {
 		char ch = text[pos];
 		text.erase(pos,1);
@@ -32,6 +34,7 @@ public:
 			redoStack.pop();
 		}
 	}
+	// 撤销：从 undo 弹一个动作执行，并把正向动作压入 redo
 	void undo() {
 		if (undoStack.empty()) return;
 		action act = undoStack.top();
@@ -45,6 +48,7 @@ public:
 			redoStack.push(action{ action::DELETE,act.position,act.value });
 		}
 	}
+	// 重做：从 redo 弹一个动作执行，并把反向动作压回 undo
 	void redo() {
 		if (redoStack.empty()) return;
 		action act = redoStack.top();
@@ -58,6 +62,7 @@ public:
 			undoStack.push(action{ action::DELETE,act.position,act.value });
 		}
 	}
+	// 公共逻辑：从 from 栈取动作执行，再把反向动作压入 to 栈
 	void moveaction(std::stack<action>&from,std::stack<action>&to) {
 		if (from.empty()) return;
 		action act = from.top();

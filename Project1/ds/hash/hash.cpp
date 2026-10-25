@@ -32,8 +32,11 @@ public:
 	}
 	hash(const hash&) = delete;
 	hash& operator=(const hash&) = delete;
+	// 返回当前元素个数（不是桶数组大小）
 	int getSize() const { return size; }
+	// 返回桶数组容量（rehash 时会翻倍）
 	int getCapacity() const { return capacity; }
+	// 哈希函数：key 的 ASCII 累加后对 capacity 取余，得到桶下标
 	int hashFunc(const std::string& key) {
 		int asciisum = 0;
 		for (char t:key) {
@@ -57,6 +60,7 @@ public:
 			rehash();
 		}
 	}
+	// 扩容：容量翻倍，遍历旧桶每个节点按新容量重算位置，头插到新桶，最后释放旧数组
 	void rehash() {
 		int oldcap = capacity;//保留旧容量
 		hashnode** oldbuckets = buckets;//保留旧桶数组
@@ -76,10 +80,12 @@ public:
 		}
 		delete[] oldbuckets;	//释放旧数组
 	}
+	// 查找 key 对应的 value；找不到返回 -1
 	int find(const std::string&key) {
 		hashnode* node = findnode(key);
 		return node ? node->value : -1;
 	}
+	// 内部辅助：返回 key 对应的节点指针；找不到返回 nullptr
 	hashnode* findnode(const std::string&key) {
 		int pos = hashFunc(key);
 		hashnode* cur = buckets[pos];
@@ -91,6 +97,7 @@ public:
 		}
 		return nullptr;
 	}
+	// 删除 key：用 prev 维护链表；删的是链头时要改 buckets[pos]
 	void remove(const std::string& key) {
 		int pos = hashFunc(key);
 		hashnode* cur = buckets[pos];
