@@ -10,10 +10,21 @@
 //
 // 【面试会问的】
 //   1. mid = (lo+hi)/2 有什么问题？怎么写才不溢出？
+//      如果hi是INT_MAX那加lo会溢出错误，用lo+(hi-lo)/2是一样的
 //   2. 左闭右闭 [lo,hi] 和左闭右开 [lo,hi) 两种写法，循环条件分别是什么？
+//      左闭右闭是lo<=hi，左闭右开是lo<hi
 //   3. lower_bound / upper_bound 的区别？「第一个 >= x」和「第一个 > x」
+//      lower_bound 把等于 target的元素算作候选（留在右边）；
+//      upper_bound 把等于 target的元素排除掉（推到左边）。
+//      所以前者找第一个 ≥，后者找第一个 > 。
 //   4. 二分只能用在有序数组上吗？（不是 —— 只要问题有「单调性」就能二分，LC162 峰值就是例子）
-//
+//      不是只能用在有序数组上。 二分的真正前提是：能构造出一个单调的「是/否」判断，
+//      使得答案的一侧全是「是」、另一侧全是「否」。
+//      有序数组 → arr[i] >= x 天然单调
+//      旋转数组 → 哪一半有序 可判定
+//      找峰值 → 上坡方向 保证有峰
+//      找出单调性并找转折点and局部决策 + 必然存在
+// 
 // 【编译运行】
 //   cmake --build build --config Debug --target ds_binary_search_binary_search
 // =============================================================================
@@ -36,8 +47,23 @@
 // -----------------------------------------------------------------------------
 int binary_search(const std::vector<int>& arr, int target) {
     // TODO: 在这里实现
-    (void)arr; (void)target;
-    return -2;   // 故意返回一个不可能的值，让测试明显失败
+    int lo = 0;
+    int hi = (int)arr.size()-1;
+    while (lo<=hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid]<target) {
+            lo = mid+1;
+        }
+        else if (arr[mid]>target) {
+            hi = mid-1;
+        }
+        else {
+            return mid;
+        }
+    }
+    return -1;
+    //(void)arr; (void)target;
+    //return -2;   // 故意返回一个不可能的值，让测试明显失败
 }
 
 // -----------------------------------------------------------------------------
@@ -58,8 +84,20 @@ int binary_search(const std::vector<int>& arr, int target) {
 // -----------------------------------------------------------------------------
 int lower_bound(const std::vector<int>& arr, int target) {
     // TODO: 在这里实现
-    (void)arr; (void)target;
-    return -2;
+    int lo = 0;
+    int hi = (int)arr.size();   //要是target大于数组中所有元素，就返回最后一个元素
+    while (lo<hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid]<target) {
+            lo = mid + 1;
+        }
+        else {
+            hi = mid;
+        }
+    }
+    return lo;
+    //(void)arr; (void)target;
+    //return -2;
 }
 
 // -----------------------------------------------------------------------------
@@ -74,8 +112,20 @@ int lower_bound(const std::vector<int>& arr, int target) {
 // -----------------------------------------------------------------------------
 int upper_bound(const std::vector<int>& arr, int target) {
     // TODO: 在这里实现
-    (void)arr; (void)target;
-    return -2;
+    int lo = 0;
+    int hi = (int)arr.size();
+    while (lo<hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (arr[mid] <= target) {
+            lo = mid + 1;
+        }
+        else {
+            hi = mid;
+        }
+    }
+    return lo;
+    //(void)arr; (void)target;
+    //return -2;
 }
 
 // -----------------------------------------------------------------------------
@@ -92,8 +142,31 @@ int upper_bound(const std::vector<int>& arr, int target) {
 // -----------------------------------------------------------------------------
 int search_rotated(const std::vector<int>& arr, int target) {
     // TODO: 在这里实现
-    (void)arr; (void)target;
-    return -2;
+    int lo = 0;
+    int hi = (int)arr.size() - 1;
+    while (lo<=hi) {
+        int mid = lo + (hi-lo) / 2;
+        if (arr[mid]==target) return mid;
+        if (arr[lo]<=arr[mid]) {
+            if (arr[lo] <= target && arr[mid] > target){
+                hi = mid - 1;
+            }
+            else {
+                lo = mid + 1;
+            }
+        }
+        else {
+            if (arr[mid] < target && arr[hi] >= target) {
+                lo = mid + 1;
+            }
+            else {
+                hi = mid - 1;
+            }
+        }
+    }
+    return -1;
+    //(void)arr; (void)target;
+    //return -2;
 }
 
 // -----------------------------------------------------------------------------
@@ -110,8 +183,20 @@ int search_rotated(const std::vector<int>& arr, int target) {
 // -----------------------------------------------------------------------------
 int find_peak(const std::vector<int>& arr) {
     // TODO: 在这里实现
-    (void)arr;
-    return -2;
+    int lo = 0;
+    int hi = (int)arr.size()-1;
+    while (lo<hi) {
+        int mid = lo + (hi-lo) / 2;
+        if (arr[mid] < arr[mid +1 ]) {
+            lo = mid+1;
+        }
+        else {
+            hi = mid;
+        }
+    }
+    return lo;
+    //(void)arr;
+    //return -2;
 }
 
 // =============================================================================

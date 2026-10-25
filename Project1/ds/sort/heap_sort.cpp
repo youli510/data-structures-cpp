@@ -8,11 +8,22 @@
 //
 // 【面试会问的】
 //   1. 建堆的复杂度是 O(n) 还是 O(n log n)？为什么？
+//      自顶向下是O(n log g),;自底向上是O(n),节点越多的地方，下沉次数越少。
 //   2. 堆排序的复杂度？空间？稳定吗？
+//      时间O(nlog n)空间O(1),不稳定,用swap打乱排序,起码跨越了2*i
 //   3. 堆排序和快排都是 O(n log n)，为什么堆排实际更慢？
+//      快排每次读都在同一缓存行，命中率极高；堆排内存访问下标每次翻倍，每次访问都跨越新的缓存行
 //   4. 为什么排序要用「最大堆」而不是最小堆？
+//      到最后堆顶的是最大的，直接与末尾交换就可以实现排序
 //   5. TopK 问题为什么用小顶堆？（和这里的方向相反，别搞混）
+//      因为需要实时维护，有新输入的数直接与堆顶的数进行比较，
+//      堆顶存的是最容易被淘汰的那个，所以每次淘汰只要 O(1)
 //
+//目标	                    用什么堆	        堆顶是
+//升序排序	                最大堆	        当前最大值 → 放末尾
+//求最大的 K 个（TopK）	    最小堆	        K 个里最小的 → 容易被淘汰
+//求最小的 K 个	            最大堆	        K 个里最大的 → 容易被淘汰
+
 // 【编译运行】
 //   cmake --build build --config Debug --target ds_sort_heap_sort
 // =============================================================================
@@ -32,7 +43,15 @@
 void sift_down(std::vector<int>& arr, int n, int i) {
     // TODO: 在这里实现
     //   提示：左孩子 = 2*i+1，右孩子 = 2*i+2（下标从 0 开始）
-    (void)arr; (void)n; (void)i;
+    while (2*i+1<n) {
+        int larger = 2 * i + 1;
+        int right = 2 * i + 2;
+        if (right <n && arr[right]>arr[larger]) larger = right;
+        if (arr[i] >= arr[larger]) break;
+        std::swap(arr[i],arr[larger]);
+        i = larger;
+    }
+    //(void)arr; (void)n; (void)i;
 }
 
 // -----------------------------------------------------------------------------
@@ -47,7 +66,8 @@ void sift_down(std::vector<int>& arr, int n, int i) {
 // -----------------------------------------------------------------------------
 void build_max_heap(std::vector<int>& arr, int n) {
     // TODO: 在这里实现
-    (void)arr; (void)n;
+    for (int i = n / 2 - 1; i >= 0; --i) sift_down(arr,n,i);
+    //(void)arr; (void)n;
 }
 
 // -----------------------------------------------------------------------------
@@ -62,7 +82,13 @@ void build_max_heap(std::vector<int>& arr, int n) {
 // -----------------------------------------------------------------------------
 void heap_sort(std::vector<int>& arr) {
     // TODO: 在这里实现
-    (void)arr;
+    int n = arr.size();
+    build_max_heap(arr,n);
+    for (int end = n - 1; end > 0;--end) {
+        std::swap(arr[0],arr[end]);
+        sift_down(arr,end,0);
+    }
+    //(void)arr;
 }
 
 // =============================================================================
